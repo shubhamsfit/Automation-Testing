@@ -23,7 +23,7 @@ jobs:
       - name: Merge staging into main
         run: |
           git fetch origin staging
-          git merge origin/staging --no-ff -m "Auto merge staging into main [skip ci]"
+          git merge origin/staging --allow-unrelated-histories --no-ff -m "Auto merge staging into main [skip ci]"
 
       - name: Push changes to main
         run: git push origin main
