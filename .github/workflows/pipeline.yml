@@ -8,6 +8,8 @@ on:
 jobs:
   merge:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # <-- THIS LINE gives push access
     steps:
       - name: Checkout main branch
         uses: actions/checkout@v3
