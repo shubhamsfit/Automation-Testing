@@ -3,11 +3,12 @@ name: Run Automation Tests
 on:
   repository_dispatch:
     types: [run-automation-tests]
+    workflow_dispatch:
 
 jobs:
   automation-test:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout Automation Test Repo
         uses: actions/checkout@v3
