@@ -1,26 +1,32 @@
-name: Run Automation Tests
+name: Auto Merge Staging to Main
 
 on:
-  repository_dispatch:
-    types: [run-automation-tests]
+  push:
+    branches:
+      - staging
 
 jobs:
-  automation-test:
+  merge:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Automation Test Repo
+      - name: Checkout main branch
         uses: actions/checkout@v3
-
-      - name: Set up Python + Pytest
-        uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          ref: main
+          persist-credentials: true
 
-      - name: Install Dependencies (if needed)
+      - name: Configure git user
         run: |
-          pip install -r requirements.txt || true
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Run Automation Tests
+      - name: Merge staging into main
         run: |
-          pytest
+          git fetch origin staging
+          git merge origin/staging --no-ff -m "Auto merge staging into main [skip ci]"
+
+      - name: Push changes to main
+        run: git push origin main
+        env:
+          # Use GitHub token to authenticate push
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
